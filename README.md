@@ -1,0 +1,3 @@
+- I plan to note down the best practice and bad practice of writing code
+- All the note is in branch
+- Currently, i got branch for backend-java and frontend-react
