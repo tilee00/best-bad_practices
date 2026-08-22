@@ -1,7 +1,7 @@
 # Java Service
 - show the best practice and bad practice of the EXAMPLE code
 
-### Example Code 1 (22 Aug 2026)
+### Example Code 1 (22 Aug 2026) ==========================
 - a code to get data from nested entity named MerchantEntity
 
 ```java
@@ -94,7 +94,7 @@ List<BrandEntity> brandEntities = brandRepository.findByMerchantIdWithMerchant(m
 ```
 
 
-### Example Code 2 (22 Aug 2026)
+### Example Code 2 (22 Aug 2026) ==========================
 - a code to throw error when id is not null
 
 ```java
@@ -153,8 +153,99 @@ if (brandOutletReq.getOutlets().stream().map(OutletReq::getOutletId).anyMatch(Ob
 ```
 
 
+### Example Code 3 (22 Aug 2026) ==========================
+- the code is to get all the enum value and place into a map list
 
-### TEMPLATE Example Code (date)
+```java
+// Example 3 START ==========================
+private Map<Integer, String> getFeedbackType() {
+    Map<Integer, String> map = new LinkedHashMap<>();
+
+    EnumSet<FeedbackTypeEnum> enumGrp = EnumSet.allOf(FeedbackTypeEnum.class);
+
+    for (FeedbackTypeEnum item : enumGrp) {
+        map.put(item.getKey(), ret18nMessageValue(item.getValue()));
+    }
+
+    return map;
+}
+// Example 3 END ==========================
+```
+
+### Bad Practice for Example Code 3
+
+```java
+
+// Bad Practice 1 START ==========================
+// DESC = bad because creating a new I18n resource reader/context on EVERY loop iteration (degrades performance)
+private Map<Integer, String> getFeedbackType() {
+    Map<Integer, String> map = new HashMap<>();
+    for (FeedbackTypeEnum item : FeedbackTypeEnum.values()) {
+        MessageSource messageSource = new ResourceBundleMessageSource(); 
+        String translated = messageSource.getMessage(item.getValue(), null, Locale.getDefault());
+        map.put(item.getKey(), translated);
+    }
+    return map;
+}
+// Bad Practice 1 END ==========================
+
+// Bad Practice 2 START ==========================
+private Map<Integer, String> getFeedbackType() {
+    Map map = new HashMap(); // BAD: Raw types map (Map instead of Map<Integer, String>)
+    
+    // BAD: Hardcoding enum handling manually instead of looping enum.values()
+    for (int i = 0; i < 100; i++) { 
+        try {
+            FeedbackTypeEnum item = FeedbackTypeEnum.values()[i];
+            map.put(item.getKey(), ret18nMessageValue(item.getValue()));
+        } catch (ArrayIndexOutOfBoundsException e) {
+            break; // BAD: Using exceptions to stop loop when outOfBounds
+        }
+    }
+    return map;
+}
+// Bad Practice 2 END ==========================
+
+```
+
+### Best Practice for Example Code 3
+
+```java
+
+// Best Practice 1 START ==========================
+// DESC = Passing values.length to prevents the LinkedHashMap from constantly resizing
+// DESC = not need create EnumSet object just use directly FeedbackTypeEnum.values()
+private Map<Integer, String> getFeedbackType() {
+    FeedbackTypeEnum[] values = FeedbackTypeEnum.values();
+    Map<Integer, String> map = new LinkedHashMap<>(values.length);
+
+    for (FeedbackTypeEnum item : values) {
+        map.put(item.getKey(), ret18nMessageValue(item.getValue()));
+    }
+
+    return map;
+}
+// Best Practice 1 END ==========================
+
+// Best Practice 2 START ==========================
+// DESC = replaces explicit loop boilerplates with a functional stream pipeline
+private Map<Integer, String> getFeedbackType() {
+    return Arrays.stream(FeedbackTypeEnum.values())
+        .collect(Collectors.toMap(
+            FeedbackTypeEnum::getKey,
+            item -> ret18nMessageValue(item.getValue()),
+            // Map only allow uniquey key, hence if duplicate key happen, keep the oldValue
+            (oldVal, newVal) -> oldVal,
+            // convert to target return type
+            LinkedHashMap::new
+        ));
+}
+// Best Practice 2 END ==========================
+
+```
+
+
+### TEMPLATE Example Code (date) ==========================
 - desc
 
 ```java
