@@ -1,5 +1,6 @@
 # Java Service
 - show the best practice and bad practice of the EXAMPLE code
+- there might be wrong info, as the info mainly from AI
 
 ### Example Code 1 (22 Aug 2026) ==========================
 - a code to get data from nested entity named MerchantEntity
