@@ -6,6 +6,7 @@
 
 ```java
 // Example 1 START ==========================
+// DESC = using entityManager.getReference()
 @Entity
 @Table(name = "brand", schema = "rewd_brand")
 public class BrandEntity implements Serializable {
