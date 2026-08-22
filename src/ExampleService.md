@@ -1,8 +1,11 @@
 # Java Service
 - show the best practice and bad practice of the EXAMPLE code
-- there might be wrong info, as the info mainly from AI
 
-### Example Code 1 (22 Aug 2026) ==========================
+# Note
+- The key is balancing readability with performance.
+- there might be wrong info, as the info mainly from AI and my experience
+
+### ☆ Example Code 1 (22 Aug 2026) ☆☆☆☆☆☆☆☆☆☆☆☆
 - a code to get data from nested entity named MerchantEntity
 
 ```java
@@ -95,7 +98,7 @@ List<BrandEntity> brandEntities = brandRepository.findByMerchantIdWithMerchant(m
 ```
 
 
-### Example Code 2 (22 Aug 2026) ==========================
+### ☆ Example Code 2 (22 Aug 2026) ☆☆☆☆☆☆☆☆☆☆☆☆
 - a code to throw error when id is not null
 
 ```java
@@ -115,7 +118,7 @@ if (listOutletIdPayload.stream().anyMatch(Objects::nonNull)) {
 
 // Bad Practice 1 START ==========================
 // DESC = code 404 mean page not found, so should be 400 Bad Request
-// DESC = 2 stream is used to achieve result, waste memory and CPU
+// DESC = 2 stream is used to achieve result, a bit waste memory and CPU
 List<Integer> listOutletIdPayload = brandOutletReq.getOutlets().stream().map(OutletReq::getOutletId).toList();
 
 if (listOutletIdPayload.stream().anyMatch(Objects::nonNull)) {
@@ -126,7 +129,7 @@ if (listOutletIdPayload.stream().anyMatch(Objects::nonNull)) {
 
 // Bad Practice 2 START ==========================
 // DESC = .filter() did not stop after found the first match which wasted computations
-// DESC = waste memory to store a list with nonNullId when only a boolean is needed
+// DESC = a bit waste memory to store a list with nonNullId when only a boolean is needed
 List<Integer> nonNullOutletIds = brandOutletReq.getOutlets().stream()
     .map(OutletReq::getOutletId)
     .filter(Objects::nonNull)
@@ -145,7 +148,7 @@ if (!nonNullOutletIds.isEmpty()) {
 
 // Best Practice 1 START ==========================
 // DESC = result of stream just to evaluate, zero memory allocated to stored result of stream, saved memory
-// DESC = .anyMatch() is stop once match, does not waste CPU cycles evaluating the rest 
+// DESC = .anyMatch() is stop once match, does not waste much CPU cycles evaluating the rest 
 if (brandOutletReq.getOutlets().stream().map(OutletReq::getOutletId).anyMatch(Objects::nonNull)) {
     return response.setCode(400).setMessage(getI18nMessage("brand.error.outlet-must-null"));
 }
@@ -154,7 +157,7 @@ if (brandOutletReq.getOutlets().stream().map(OutletReq::getOutletId).anyMatch(Ob
 ```
 
 
-### Example Code 3 (22 Aug 2026) ==========================
+### ☆ Example Code 3 (22 Aug 2026) ☆☆☆☆☆☆☆☆☆☆☆☆
 - the code is to get all the enum value and place into a map list
 
 ```java
@@ -214,10 +217,10 @@ private Map<Integer, String> getFeedbackType() {
 ```java
 
 // Best Practice 1 START ==========================
-// DESC = Passing values.length to prevents the LinkedHashMap from constantly resizing
 // DESC = not need create EnumSet object just use directly FeedbackTypeEnum.values()
 private Map<Integer, String> getFeedbackType() {
     FeedbackTypeEnum[] values = FeedbackTypeEnum.values();
+    // Good: Passing values.length to prevents the LinkedHashMap from constantly resizing
     Map<Integer, String> map = new LinkedHashMap<>(values.length);
 
     for (FeedbackTypeEnum item : values) {
@@ -246,7 +249,7 @@ private Map<Integer, String> getFeedbackType() {
 ```
 
 
-### TEMPLATE Example Code (date) ==========================
+### ☆ TEMPLATE Example Code (date) ☆☆☆☆☆☆☆☆☆☆☆☆
 - desc
 
 ```java
