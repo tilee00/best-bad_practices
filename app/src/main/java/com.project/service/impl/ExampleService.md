@@ -2,7 +2,7 @@
 - show the best practice and bad practice of the EXAMPLE code
 
 ### Example Code 1 (22 Aug 2026)
-- get data from nested entity named MerchantEntity
+- a code to get data from nested entity named MerchantEntity
 
 ```java
 // Example 1 START ==========================
@@ -93,11 +93,73 @@ List<BrandEntity> brandEntities = brandRepository.findByMerchantIdWithMerchant(m
 
 ```
 
+
+### Example Code 2 (22 Aug 2026)
+- a code to throw error when id is not null
+
+```java
+// Example 2 START ==========================
+// DESC = throw error when any Id is not null
+List<Integer> listOutletIdPayload = brandOutletReq.getOutlets().stream().map(OutletReq::getOutletId).toList();
+
+if (listOutletIdPayload.stream().anyMatch(Objects::nonNull)) {
+    return response.setCode(404).setMessage(getI18nMessage("brand.error.outlet-must-null"));
+}
+// Example 2 END ==========================
+```
+
+### Bad Practice for Example Code 2
+
+```java
+
+// Bad Practice 1 START ==========================
+// DESC = code 404 mean page not found, so should be 400 Bad Request
+// DESC = 2 stream is used to achieve result, waste memory and CPU
+List<Integer> listOutletIdPayload = brandOutletReq.getOutlets().stream().map(OutletReq::getOutletId).toList();
+
+if (listOutletIdPayload.stream().anyMatch(Objects::nonNull)) {
+    return response.setCode(404).setMessage(getI18nMessage("brand.error.outlet-must-null"));
+}
+// Bad Practice 1 END ==========================
+
+
+// Bad Practice 2 START ==========================
+// DESC = .filter() did not stop after found the first match which wasted computations
+// DESC = waste memory to store a list with nonNullId when only a boolean is needed
+List<Integer> nonNullOutletIds = brandOutletReq.getOutlets().stream()
+    .map(OutletReq::getOutletId)
+    .filter(Objects::nonNull)
+    .toList();
+
+if (!nonNullOutletIds.isEmpty()) {
+    return response.setCode(404).setMessage(getI18nMessage("brand.error.outlet-must-null"));
+}
+// Bad Practice 2 END ==========================
+
+```
+
+### Best Practice for Example Code 2
+
+```java
+
+// Best Practice 1 START ==========================
+// DESC = result of stream just to evaluate, zero memory allocated to stored result of stream, saved memory
+// DESC = .anyMatch() is stop once match, does not waste CPU cycles evaluating the rest 
+if (brandOutletReq.getOutlets().stream().map(OutletReq::getOutletId).anyMatch(Objects::nonNull)) {
+    return response.setCode(400).setMessage(getI18nMessage("brand.error.outlet-must-null"));
+}
+// Best Practice 1 END ==========================
+
+```
+
+
+
 ### TEMPLATE Example Code (date)
 - desc
 
 ```java
 // Example 1 START ==========================
+// DESC = 
 // Example 1 END ==========================
 ```
 
