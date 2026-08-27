@@ -7,4 +7,4 @@
 - Currently, i got branch for backend-java and frontend-react
 
 ### What is the coding_note in main branch
-- just some note I write while learning about coding in my life
+- just some note I write while I learn coding from other developer such as ***Hakim***
