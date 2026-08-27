@@ -1,4 +1,5 @@
-# 1. view all notification
+# view all notification with filter and pagination
+- for small amount of not frequently updated data can use the getMapping() below
 
 ```java
 // service layer
@@ -66,31 +67,5 @@ private PushNotificationListItem mapToItem(PushNotificationHistoryEntity entity,
             .hasRead(hasRead(entity.getStatus()))
             .createdDate(DatetimeDisplayUtil.toUserLocalDate(entity.getCreatedAt()))
             .build();
-    }
-```
-
-```java
-@Override
-    public String presignedUrl(String bucket, Supplier<String> pathSupplier, Duration duration) {
-        // get file name and file path
-        String path = pathSupplier.get();
-        String resolvedBucket = resolveBucket(bucket);
-
-        // ask AWS S3 to create a special link for this file (with attach token) and set when expired
-        PresignedGetObjectRequest presigned = s3Presigner.presignGetObject(req ->
-            req.signatureDuration(duration)
-                .getObjectRequest(it -> it
-                    .bucket(resolvedBucket)
-                    .key(path)
-                )
-        );
-
-        var url = presigned.url().toString();
-        // when proxy enabled, then replace the actual url with custom url
-        if (Boolean.TRUE.equals(storageProperties.getProxyEnabled())) {
-            url = url.replaceFirst(storageProperties.getPublicUrl(), storageProperties.getPublicUrl()
-                + storageProperties.getProxyContextPath());
-        }
-        return url;
     }
 ```
