@@ -1,11 +1,13 @@
 # What is PreSigned Url?
-- a way to upload file directly to cloud storage in limited time period
-- skip middleman (server side) from flow :: [client side -> server side -> cloud storage]
-- allow PUT/POST and GET
+- allow PUT/POST (update) and GET (view) file
+- directly from cloud storage within limited time period
+- skip middleman (server side) from normal flow :: [client side -> server side -> cloud storage]
 
 # Why use PreSigned Url?
-1. when skip middleman (server side), then is Safe and Fast
-- upload to cloud storage directly prevent put the master login credential in the client side
+1. when skip middleman (server side), then is Fast
+- in order to be fast, we access directly to cloud storage
+- SAFETY NOTE (access to cloud but can't put the master cloud login credential in client side is dangerous)
+    - hence, use this presigned url, which with a active token expired after a duration
 
 2. With Expired Time
 - consist of token active in limited time period 
@@ -23,7 +25,7 @@ private List<PushNotificationGroupedByMonthRes> groupByDatePreservingOrder(List<
         .collect(Collectors.toMap(
             BrandLogoInfo::getBrandId,
             logoInfo -> Optional.ofNullable(logoInfo.getLogoPath())
-                .map(fileService::presignedUrl) // pass the logoPath into fileService with parameter presingedUrl
+                .map(fileService::presignedUrl) // pass the logoPath into fileService as parameter presingedUrl
                 .orElse(""),
             (existing, replacement) -> existing
         ));
@@ -32,7 +34,7 @@ private List<PushNotificationGroupedByMonthRes> groupByDatePreservingOrder(List<
 @Override
     public String presignedUrl(String bucket, Supplier<String> pathSupplier, Duration duration) {
         String path = pathSupplier.get();
-        // bucket = top-level folder or storage container
+        // bucket = name for the top-level folder/storageContainer in cloudStorage
         String resolvedBucket = Optional.ofNullable(StringUtils.trimToNull(bucket))
             .orElse(storageProperties.getBucket());
 
