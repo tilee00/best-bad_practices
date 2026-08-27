@@ -1,6 +1,7 @@
 # What is PreSigned Url?
 - a way to upload file directly to cloud storage in limited time period
 - skip middleman (server side) from flow :: [client side -> server side -> cloud storage]
+- allow PUT/POST and GET
 
 # Why use PreSigned Url?
 1. when skip middleman (server side), then is Safe and Fast
@@ -10,10 +11,10 @@
 - consist of token active in limited time period 
 - SAFETY NOTE (who with link will have access)
     - so the access control need to be done before link generated
-    - allow the link for single use only
-    - access granted restricted by the requested user home IP address
+    - allow the link for single use only [AWS S3 not supported]
+    - access granted restricted by the requested user home IP address [AWS S3 not supported]
 
-# Example usage
+# Example usage for viewing purpose
 ```java
 private List<PushNotificationGroupedByMonthRes> groupByDatePreservingOrder(List<PushNotificationListItem> items) {
 
