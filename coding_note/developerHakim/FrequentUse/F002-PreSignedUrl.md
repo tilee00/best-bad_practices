@@ -7,7 +7,7 @@
 1. when skip middleman (server side), then is Fast
 - in order to be fast, we access directly to cloud storage
 - SAFETY NOTE (access to cloud but can't put the master cloud login credential in client side is dangerous)
-    - hence, use this presigned url, which with a active token expired after a duration
+    - hence, use this presigned url, which with a active guess token expired after a duration
 
 2. With Expired Time
 - consist of token active in limited time period 
@@ -16,8 +16,22 @@
     - allow the link for single use only [AWS S3 not supported]
     - access granted restricted by the requested user home IP address [AWS S3 not supported]
 
+# Normal Flow before presigned url
+1. Server side Receives the file from client side: 
+- The server accepts the uploaded file into its own temporary memory (RAM).
+
+2. Processes/Validates the file: 
+- It checks if the file is safe, checks the file size, or checks user permissions.
+
+3. Re-uploads the file: 
+- The server opens a new connection to the Cloud Storage (like AWS S3) 
+- and sends the file over to its final home.
+
+- But with presigned url we skip the server side directly
+
 # Example usage for viewing purpose
 ```java
+// pass file path and call get presigned url method
 private List<PushNotificationGroupedByMonthRes> groupByDatePreservingOrder(List<PushNotificationListItem> items) {
 
     var brandLogoUrlMap = brandLogoRepository.getLogoInfoByBrandIdIn(brandIds)
@@ -31,7 +45,23 @@ private List<PushNotificationGroupedByMonthRes> groupByDatePreservingOrder(List<
         ));
 }
 
-@Override
+public interface IFileService {
+    default String presignedUrl(String path) {
+        return presignedUrl(null, () -> path);
+    }
+
+    String presignedUrl(String bucket, Supplier<String> pathSupplier);
+}
+
+
+@Slf4j
+@Component
+@RequiredArgsConstructor
+public class S3Svc implements IFileService {
+
+    private final S3Presigner s3Presigner;
+
+    @Override
     public String presignedUrl(String bucket, Supplier<String> pathSupplier, Duration duration) {
         String path = pathSupplier.get();
         // bucket = name for the top-level folder/storageContainer in cloudStorage
@@ -46,6 +76,6 @@ private List<PushNotificationGroupedByMonthRes> groupByDatePreservingOrder(List<
                     .key(path)
                 )
         );
-
     }
+}
 ```
