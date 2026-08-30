@@ -71,25 +71,43 @@ public class OnboardingReq {
 // min / max
     @Min(0)
     private int page;
+
     @Min(1)
     private int size;
-    @NotNull
-    @DecimalMin(value = "0.01")
+
+    /**
+     * @Digits Sets the maximum size and decimal format of the number
+     * integer = 16: Allows up to 16 digits before the decimal point
+     * fraction = 2: Allows at most 2 digits after the decimal point
+     */
+    @DecimalMin(value = "0.01", message = "amount must be greater than 0")
+    @Digits(integer = 16, fraction = 2, message = "amount must have at most 2 decimal places")
     private BigDecimal amount;
+
     @Size(max = 500, message = "Value must not exceed 500 characters")
     private String value;
 
 // mandatory
     @NotBlank(message = "Phone number must not be blank")
     private String phoneNumber;
+
     @NotNull(message = "OTP type must not be null")
     private OtpTypeEnum otpType;
 
 // custom JSON key
-    // with @JsonProperty [expects in format "message_id": 123]
-    // NO @JsonProperty [expects in format "messageId": 123]
+    /** With @JsonProperty [expects in format "message_id": 123]
+     *  NO @JsonProperty [expects in format "messageId": 123]  
+     */ 
     @JsonProperty("message_id")
     private String messageId;
+
+    @ValidFile(
+        maxSize = 2097152,
+        allowedTypes = {"image/svg+xml","image/png","image/jpg","image/gif","image/jpeg"},
+        message = "Only allowed SVG,PNG,JPG and GIF file type with file size maximum 2MB"
+    )
+    @Valid
+    private List<MultipartFile> bannerImage;
 
 ```
 
