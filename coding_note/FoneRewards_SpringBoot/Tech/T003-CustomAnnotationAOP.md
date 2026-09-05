@@ -72,4 +72,4 @@ public class LoggingAspectConfiguration {
 > plenty many
 > not ok
 > haha huhu
-> hehe
+> hehe here is test send
