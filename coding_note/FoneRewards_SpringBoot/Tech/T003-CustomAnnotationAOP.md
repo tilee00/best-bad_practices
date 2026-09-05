@@ -59,7 +59,7 @@ public class LoggingAspectConfiguration {
 # Code - 2 - how to make custom annotation
 ```java
 ```
-> o notify?
+> o notify? ---- notify
 
 > haha
 
