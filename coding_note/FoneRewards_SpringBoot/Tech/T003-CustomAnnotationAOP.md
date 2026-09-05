@@ -59,7 +59,11 @@ public class LoggingAspectConfiguration {
 # Code - 2 - how to make custom annotation
 ```java
 ```
+> ok
 
 # Code - 3 - how to use those custom annotation in AOP
 ```java
+
 ```
+
+> not ok
