@@ -1,10 +1,10 @@
-# Important
-- there might be wrong info, as the info mainly from AI and my life
+# Smart E-Commerce Order & Inventory Backend
 
-### there are some branches
-- I plan to note down the best practice and bad practice of writing code
-- Those note are in the branch
-- Currently, i got branch for backend-java and frontend-react
+### Issue Try to Solve
+- race conditions (multiple users buying the last item), 
+- unauthorized access (data leaks), 
+- slow performance (heavy operations blocking the system), 
+- messy logs (difficulty finding bugs)
 
-### What is the coding_note in main branch
-- just some note I write while I learn coding from other developer
+### Feature
+- 
