@@ -4,6 +4,8 @@ info:
   type: workspace
 
 collections:
+  - name: "bd_first_aop"
+    path: "collections/bd_first_aop"
 
 specs:
 
