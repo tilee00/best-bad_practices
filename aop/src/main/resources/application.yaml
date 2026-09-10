@@ -1,3 +1,31 @@
 spring:
   application:
     name: aop
+
+  # Connection details required for external databases (like PostgreSQL)
+  datasource:
+    url: jdbc:postgresql://localhost:5433/myaop
+    username: myaop_user
+    password: password
+    driver-class-name: org.postgresql.Driver
+
+  # Configuration settings for Hibernate (the ORM tool that maps Java objects to SQL)
+  jpa:
+    hibernate:
+      # validate = Compares Java Entities against the database schema on startup and fails if they don't match
+      ddl-auto: validate
+
+  # Connection details required for redis
+  data:
+    redis:
+      host: localhost
+      port: 6371
+      password: "abc123" # Leave empty if no password is set
+      timeout: 60000ms # Connection timeout
+
+      # Optional connection pooling
+      lettuce:
+        pool:
+          max-active: 8 # Maximum active connections
+          max-idle: 8   # Maximum idle connections in the pool
+          min-idle: 0   # Minimum idle connections in the pool

@@ -1,0 +1,37 @@
+# Tells Docker which format version this file is using
+version: '3.8'
+
+# Starts the section where we define all the applications (containers) we want to run
+services:
+
+  # This is the custom name we give to our Redis container service inside this file
+  redis-server:
+
+    # Specifies the official pre-built Redis blueprint (image) to download from Docker Hub
+    # "alpine" means a tiny, lightweight version of Linux that takes up less disk space
+    image: redis:alpine
+
+    # Sets a custom name for the running container so it is easy to find in Docker Desktop
+    container_name: myaop_redis_container
+
+    # Maps ports between your computer (host machine) and the inside of the Docker container
+    # Format: "YOUR_COMPUTER_PORT : INSIDE_DOCKER_PORT"
+    ports:
+      # We map port 6371 on your computer to port 6379 inside the container (Redis's default internal port)
+      - "6371:6379"
+
+    # Saves your Redis data to your computer's hard drive so data is not lost when the container stops
+    volumes:
+      # Format: "YOUR_COMPUTER_FOLDER : INSIDE_DOCKER_FOLDER"
+      # Creates a folder named "redis_data" in your current directory and connects it to where Redis stores data inside
+      - ./redis_data:/data
+
+    # Tells Docker when to automatically restart this container
+    # "unless-stopped" means it will automatically restart if it crashes or when Docker starts up,
+    # unless you explicitly ran the "docker stop" command
+    restart: unless-stopped
+
+    # Custom command passed directly to Redis when it starts up
+    # "--save 60 1" tells Redis to save data to disk if at least 1 key changes every 60 seconds (persistence)
+    # "--appendonly yes" turns on AOF (Append Only File) mode to log every write operation for extra safety
+    command: redis-server --requirepass abc123 --save 60 1 --appendonly yes

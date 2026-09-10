@@ -18,7 +18,7 @@ public class ProductController {
 
     // @RequireRole(Role.ADMIN), @AuditLog(action = "CREATE_PRODUCT")
     @PostMapping
-    public ResponseEntity<Void> crate(@RequestBody ProductReq productReq) {
+    public ResponseEntity<Void> create(@RequestBody ProductReq productReq) {
 //        iService.saveAboutUs(productReq);
         return ResponseEntity.ok().body(null);
     }
