@@ -45,6 +45,9 @@ public interface PushNotificationHistRepository extends JpaRepository<PushNotifi
              AND (coalesce(:#{#filter.endDate}, null) IS NULL OR pnh.createdDate <= :#{#filter.endDate})
         """)
     Slice<PushNotificationHistoryEntity> findAll(PushNotificationFilter filter, Pageable pageable);
+    /*
+     * a Slice is a light version of a Page (a list of results from a database)
+     */
 
 }
 

@@ -53,13 +53,25 @@ public class LoggingAspectConfiguration {
         return new LoggingAspect(env);
     }
 }
-
 ```
 
 # Code - 2 - how to make custom annotation
 ```java
+@Target(ElementType.METHOD)
+@Retention(RetentionPolicy.RUNTIME)
+public @interface AdminActionLogged {
+
+    ActionType action();
+
+    TargetModule module();
+
+    String remarks() default "";
+
+    boolean usedAuthenticator() default false;
+}
 ```
 
 # Code - 3 - how to use those custom annotation in AOP
 ```java
+
 ```
