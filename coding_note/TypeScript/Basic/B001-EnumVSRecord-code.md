@@ -11,6 +11,7 @@ export interface Permission {
   description: string;
 }
 
+// export methodType methodName = argument: returnType
 export const groupPermissionsByModule = (permissions: Permission[]): Record<string, Permission[]> => {
   const groups: Record<string, Permission[]> = {};
   permissions.forEach((p) => {
